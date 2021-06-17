@@ -3,7 +3,7 @@ import config from '@local/config'
 
 type ValidateResponse = {
   id: string
-  warriorname: string
+  robotname: string
   iat: number
   exp: number
 }

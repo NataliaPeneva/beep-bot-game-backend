@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as graphql from 'graphql'
 
-import Warrior from '@local/models/warrior-model'
+import Robot from '@local/models/robot-model'
 import Skill from '@local/models/skill-model'
-import { WarriorType, SkillType } from './type'
+import { RobotType, SkillType } from './type'
 import { validateToken } from '@local/middlewares/validate-token'
 
 const { GraphQLObjectType, GraphQLID, GraphQLList } = graphql
@@ -11,13 +11,13 @@ const { GraphQLObjectType, GraphQLID, GraphQLList } = graphql
 export const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
-    warrior: {
-      type: WarriorType,
+    robot: {
+      type: RobotType,
       resolve(parent: any, args: any, { headers }: any) {
         const { authorization } = headers
-        const warrior = validateToken(authorization)
+        const robot = validateToken(authorization)
 
-        return Warrior.findById(warrior.id)
+        return Robot.findById(robot.id)
       },
     },
     opponent: {
@@ -27,33 +27,33 @@ export const RootQuery = new GraphQLObjectType({
         const { authorization } = headers
         validateToken(authorization)
 
-        return Skill.findOne({ warriorId: args.id })
+        return Skill.findOne({ robotId: args.id })
       },
     },
-    warriors: {
-      type: new GraphQLList(WarriorType),
+    robots: {
+      type: new GraphQLList(RobotType),
       resolve(parent: any, args: any, { headers }: any) {
         const { authorization } = headers
         validateToken(authorization)
-        return Warrior.find()
+        return Robot.find()
       },
     },
     opponents: {
-      type: new GraphQLList(WarriorType),
+      type: new GraphQLList(RobotType),
       async resolve(parent: any, args: any, { headers }: any) {
         const { authorization } = headers
-        const warriorInfo = validateToken(authorization)
-        const warrior = await Warrior.findById(warriorInfo.id)
-        return Warrior.find({ tribe: { $ne: warrior?.tribe } })
+        const robotInfo = validateToken(authorization)
+        const robot = await Robot.findById(robotInfo.id)
+        return Robot.find({ swarm: { $ne: robot?.swarm } })
       },
     },
     skill: {
       type: SkillType,
-      args: { warriorId: { type: GraphQLID } },
+      args: { robotId: { type: GraphQLID } },
       resolve(parent: any, args: any, { headers }: any) {
         const { authorization } = headers
-        const warrior = validateToken(authorization)
-        return Skill.findOne({ warriorId: warrior.id })
+        const robot = validateToken(authorization)
+        return Skill.findOne({ robotId: robot.id })
       },
     },
     skills: {

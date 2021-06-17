@@ -6,21 +6,19 @@ export interface ISkill extends mongoose.Document {
   strength: Number
   dexterity: Number
   faith: Number
-  wisdom: Number
-  magic: Number
+  intelligence: Number
   agility: Number
-  warriorId: string
+  robotId: string
 }
 
 const SkillSchema = new Schema({
   strength: { type: Number },
   dexterity: { type: Number },
   faith: { type: Number },
-  wisdom: { type: Number },
-  magic: { type: Number },
+  intelligence: { type: Number },
   agility: { type: Number },
 
-  warriorId: { type: String, required: true },
+  robotId: { type: String, required: true },
 })
 
 export default mongoose.model<ISkill>('Skill', SkillSchema)
